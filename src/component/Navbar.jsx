@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { FaHome, FaShoppingCart, FaUser, FaMoon, FaSun } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for routing
 
-const Navbar = () => {
+const Navbar = ({ cartCount, onCartClick }) => {
   const [darkMode, setDarkMode] = useState(false);
+  const navigate = useNavigate(); // Use navigate hook for page navigation
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
+  };
+
+  const handleLogoClick = () => {
+    navigate("/"); // Redirect to the home page when logo is clicked
   };
 
   return (
@@ -17,9 +23,9 @@ const Navbar = () => {
         }`}
       >
         <div className="container mx-auto flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center">
-            <h1 className="text-2xl font-bold">ShopsPhere</h1>
+          {/* Logo - Redirect to Home on Click */}
+          <div className="flex items-center cursor-pointer" onClick={handleLogoClick}>
+            <h1 className="text-2xl font-bold">ShopSphere</h1>
           </div>
 
           {/* Links for larger screens */}
@@ -27,7 +33,7 @@ const Navbar = () => {
             <li>
               <a
                 href="#"
-                className={`hover:underline  ${
+                className={`hover:underline ${
                   darkMode ? "text-gray-300" : "text-black"
                 }`}
               >
@@ -76,6 +82,16 @@ const Navbar = () => {
             </button>
           </div>
 
+          {/* Cart Icon with Count */}
+          <button className="relative hidden md:flex" onClick={onCartClick}>
+            <FaShoppingCart size={24} />
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-2">
+                {cartCount}
+              </span>
+            )}
+          </button>
+
           {/* Dark Mode Toggle for Larger Screens */}
           <button
             onClick={toggleDarkMode}
@@ -105,14 +121,19 @@ const Navbar = () => {
         } flex justify-around items-center md:hidden`}
       >
         {/* Home Icon */}
-        <button className="flex flex-col items-center">
+        <button className="flex flex-col items-center" onClick={handleLogoClick}>
           <FaHome size={24} />
           <span className="text-sm">Home</span>
         </button>
 
-        {/* Cart Icon */}
-        <button className="flex flex-col items-center">
+        {/* Cart Icon with Count */}
+        <button className="relative flex flex-col items-center" onClick={onCartClick}>
           <FaShoppingCart size={24} />
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-2">
+              {cartCount}
+            </span>
+          )}
           <span className="text-sm">Cart</span>
         </button>
 
